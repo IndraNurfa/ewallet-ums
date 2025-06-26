@@ -8,13 +8,13 @@ import (
 
 type User struct {
 	ID          int       `json:"id" `
-	Username    string    `json:"username" gorm:"colum:username;type:varchar(20)" validate:"required"`
-	Email       string    `json:"email" gorm:"colum:email;type:varchar(100)" validate:"required"`
-	PhoneNumber string    `json:"phone_number" gorm:"colum:phone_number;type:varchar(15)" validate:"required"`
+	Username    string    `json:"username" gorm:"uniqueIndex;colum:username;type:varchar(20)" validate:"required"`
+	Email       string    `json:"email" gorm:"uniqueIndex;colum:email;type:varchar(100)" validate:"required"`
+	PhoneNumber string    `json:"phone_number" gorm:"uniqueIndex;colum:phone_number;type:varchar(15)" validate:"required"`
 	FullName    string    `json:"full_name" gorm:"colum:full_name;type:varchar(100)" validate:"required"`
 	Address     string    `json:"address" gorm:"colum:address;type:text"`
 	Dob         string    `json:"dob" gorm:"colum:dob;type:date"`
-	Password    string    `json:"password" gorm:"colum:password;type:varchar(255)" validate:"required"`
+	Password    string    `json:"password,omitempty" gorm:"colum:password;type:varchar(255)" validate:"required"`
 	CreatedAt   time.Time `json:"-"`
 	UpdatedAt   time.Time `json:"-"`
 }
