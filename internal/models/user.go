@@ -29,7 +29,7 @@ func (l User) Validate() error {
 }
 
 type UserSession struct {
-	ID                  uint `gorm:"primarykey"`
+	ID                  int `gorm:"primarykey"`
 	CreatedAt           time.Time
 	UpdatedAt           time.Time
 	UserID              int       `json:"user_id" gorm:"type:int" validate:"required"`

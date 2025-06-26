@@ -7,5 +7,5 @@ type Healthcheck struct {
 }
 
 func (s *Healthcheck) HealthcheckServices() (string, error) {
-	return "service healthty", nil
+	return "service healthy", nil
 }
