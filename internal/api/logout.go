@@ -18,10 +18,10 @@ func (api *LogoutHandler) Logout(c *gin.Context) {
 		log = helpers.Logger
 	)
 
-	token := c.GetHeader("Authorization")
+	token := c.Request.Header.Get("Authorization")
 	err := api.LogoutService.Logout(c.Request.Context(), token)
 	if err != nil {
-		log.Error("failed to logout service: ", err)
+		log.Error("failed on logout service: ", err)
 		helpers.SendResponseHTTP(c, http.StatusInternalServerError, constants.ErrServerError, nil)
 		return
 	}

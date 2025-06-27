@@ -9,8 +9,10 @@ import (
 )
 
 type ClaimToken struct {
+	UserID   int    `json:"user_id"`
 	Username string `json:"username"`
-	Fullname string `json:"fullname"`
+	Fullname string `json:"full_name"`
+	Email    string `json:"email"`
 	jwt.RegisteredClaims
 }
 
@@ -21,11 +23,13 @@ var MapTypeToken = map[string]time.Duration{
 
 var jwtSecret = []byte(GetEnv("APP_SECRET", ""))
 
-func GenerateToken(ctx context.Context, userID int, username, fullname, tokenType string, now time.Time) (string, error) {
+func GenerateToken(ctx context.Context, userID int, username string, fullname string, email string, tokenType string, now time.Time) (string, error) {
 
 	claimToken := ClaimToken{
+		UserID:   userID,
 		Username: username,
 		Fullname: fullname,
+		Email:    email,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    GetEnv("APP_NAME", ""),
 			IssuedAt:  jwt.NewNumericDate(now),
@@ -60,7 +64,7 @@ func ValidateToken(ctx context.Context, token string) (*ClaimToken, error) {
 		return nil, fmt.Errorf("failed to parse jwt: %v", err)
 	}
 
-	if claimToken, ok = jwtToken.Claims.(*ClaimToken); !ok {
+	if claimToken, ok = jwtToken.Claims.(*ClaimToken); !ok || !jwtToken.Valid {
 		return nil, fmt.Errorf("token invalid")
 	}
 
