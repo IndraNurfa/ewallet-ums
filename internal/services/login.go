@@ -29,12 +29,12 @@ func (s *LoginService) Login(ctx context.Context, req models.LoginRequest) (mode
 		return response, errors.Wrap(err, "failed to compare password")
 	}
 
-	token, err := helpers.GenerateToken(ctx, userDetail.ID, userDetail.Username, userDetail.FullName, "jwt", now)
+	token, err := helpers.GenerateToken(ctx, userDetail.ID, userDetail.Username, userDetail.FullName, userDetail.Email, "token", now)
 	if err != nil {
 		return response, errors.Wrap(err, "failed to generate token")
 	}
 
-	refreshToken, err := helpers.GenerateToken(ctx, userDetail.ID, userDetail.Username, userDetail.FullName, "refresh_token", now)
+	refreshToken, err := helpers.GenerateToken(ctx, userDetail.ID, userDetail.Username, userDetail.FullName, userDetail.Email, "refresh_token", now)
 	if err != nil {
 		return response, errors.Wrap(err, "failed to generate refresh token")
 	}

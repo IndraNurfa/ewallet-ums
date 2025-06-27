@@ -7,8 +7,9 @@ import (
 )
 
 type ILogoutHandler interface {
-	Logout(c *gin.Context)
+	Logout(*gin.Context)
 }
+
 type ILogoutService interface {
 	Logout(ctx context.Context, token string) error
 }
