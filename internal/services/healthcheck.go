@@ -11,6 +11,6 @@ type Healthcheck struct {
 }
 
 func (s *Healthcheck) HealthcheckServices() (string, error) {
-	time := time.Now()
-	return fmt.Sprintf("service healthy, time: %v", time), nil
+	time := time.Now().UTC().Local().Format("2006-01-02 15:04:05")
+	return fmt.Sprintf("service healthy, time: %s", time), nil
 }

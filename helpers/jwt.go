@@ -21,8 +21,6 @@ var MapTypeToken = map[string]time.Duration{
 	"refresh_token": time.Hour * 72,
 }
 
-var jwtSecret = []byte(GetEnv("APP_SECRET", ""))
-
 func GenerateToken(ctx context.Context, userID int, username string, fullname string, email string, tokenType string, now time.Time) (string, error) {
 
 	claimToken := ClaimToken{
@@ -39,6 +37,8 @@ func GenerateToken(ctx context.Context, userID int, username string, fullname st
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claimToken)
 
+	jwtSecret := []byte(GetEnv("APP_SECRET", ""))
+
 	resultToken, err := token.SignedString(jwtSecret)
 	if err != nil {
 		return resultToken, fmt.Errorf("failed to generate token: %v", err)
@@ -52,6 +52,7 @@ func ValidateToken(ctx context.Context, token string) (*ClaimToken, error) {
 		claimToken *ClaimToken
 		ok         bool
 	)
+	jwtSecret := []byte(GetEnv("APP_SECRET", ""))
 
 	jwtToken, err := jwt.ParseWithClaims(token, &ClaimToken{}, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
