@@ -25,14 +25,14 @@ func (s *TokenValidationHandler) ValidateToken(ctx context.Context, req *tokenva
 		log.Error(err)
 		return &tokenvalidation.TokenResponse{
 			Message: err.Error(),
-		}, err
+		}, nil
 	}
 
 	claimToken, err := s.TokenValidationService.TokenValidation(ctx, token)
 	if err != nil {
 		return &tokenvalidation.TokenResponse{
 			Message: err.Error(),
-		}, err
+		}, nil
 	}
 
 	return &tokenvalidation.TokenResponse{
@@ -44,5 +44,4 @@ func (s *TokenValidationHandler) ValidateToken(ctx context.Context, req *tokenva
 			Email:    claimToken.Email,
 		},
 	}, nil
-	// return nil, nil
 }

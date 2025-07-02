@@ -16,7 +16,7 @@ func ServeHTTP() {
 
 	r := gin.Default()
 
-	r.GET("/health", dependency.HealthcheckApi.HealthcheckHandlerHttp)
+	r.GET("/health", dependency.HealthcheckAPI.HealthcheckHandlerHttp)
 
 	userV1 := r.Group("/users/v1")
 	userV1.POST("/register", dependency.RegisterAPI.Register)
@@ -26,7 +26,7 @@ func ServeHTTP() {
 	userV1WithAuth.DELETE("/logout", dependency.MiddlewareValidateAuth, dependency.LogoutAPI.Logout)
 	userV1WithAuth.PUT("/refresh-token", dependency.MiddlewareRefreshToken, dependency.RefreshTokenAPI.RefreshToken)
 
-	err := r.Run(":" + helpers.GetEnv("PORT", "8080"))
+	err := r.Run(":" + helpers.GetEnv("PORT", ""))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,7 +35,7 @@ func ServeHTTP() {
 type Dependency struct {
 	UserRepository interfaces.IUserRepository
 
-	HealthcheckApi  interfaces.IHealthcheckHandler
+	HealthcheckAPI  interfaces.IHealthcheckHandler
 	RegisterAPI     interfaces.IRegisterHandler
 	LoginAPI        interfaces.ILoginHandler
 	LogoutAPI       interfaces.ILogoutHandler
@@ -53,10 +53,10 @@ func dependencyInject() Dependency {
 	userRepo := &repository.UserRepository{
 		DB: helpers.DB,
 	}
+
 	registerSvc := &services.RegisterService{
 		UserRepo: userRepo,
 	}
-
 	registerAPI := &api.RegisterHandler{
 		RegisterService: registerSvc,
 	}
@@ -64,7 +64,6 @@ func dependencyInject() Dependency {
 	loginSvc := &services.LoginService{
 		UserRepo: userRepo,
 	}
-
 	loginAPI := &api.LoginHandler{
 		LoginService: loginSvc,
 	}
@@ -72,7 +71,6 @@ func dependencyInject() Dependency {
 	logoutSvc := &services.LogoutService{
 		UserRepo: userRepo,
 	}
-
 	logoutAPI := &api.LogoutHandler{
 		LogoutService: logoutSvc,
 	}
@@ -80,7 +78,6 @@ func dependencyInject() Dependency {
 	refreshTokenSvc := &services.RefreshTokenService{
 		UserRepo: userRepo,
 	}
-
 	refreshTokenAPI := &api.RefreshTokenHandler{
 		RefreshTokenService: refreshTokenSvc,
 	}
@@ -88,14 +85,13 @@ func dependencyInject() Dependency {
 	tokenValidationSvc := &services.TokenValidationService{
 		UserRepo: userRepo,
 	}
-
 	tokenValidationAPI := &api.TokenValidationHandler{
 		TokenValidationService: tokenValidationSvc,
 	}
 
 	return Dependency{
 		UserRepository:     userRepo,
-		HealthcheckApi:     healthcheckAPI,
+		HealthcheckAPI:     healthcheckAPI,
 		RegisterAPI:        registerAPI,
 		LoginAPI:           loginAPI,
 		LogoutAPI:          logoutAPI,

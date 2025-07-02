@@ -25,7 +25,7 @@ func (s *TokenValidationService) TokenValidation(ctx context.Context, token stri
 
 	_, err = s.UserRepo.GetUserSessionByToken(ctx, token)
 	if err != nil {
-		return claimToken, errors.Wrap(err, "failed to get user session")
+		return claimToken, errors.Wrap(err, "failed to get user sesion")
 	}
 
 	return claimToken, nil
